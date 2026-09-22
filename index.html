@@ -1,0 +1,1196 @@
+<!doctype html>
+<html lang="fr" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GéniePlans | Reproduction de Plans de Génie Civil A4</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome pour les icônes -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts: Inter -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+            colors: {
+              primary: {
+                50: "#f0f5ff",
+                100: "#e5edff",
+                500: "#3b82f6",
+                600: "#1d4ed8", // Bleu vif
+                800: "#1e40af", // Bleu foncé
+                900: "#1e3a8a", // Bleu très foncé (Dominant)
+              },
+              secondary: "#000000", // Noir
+              accent: {
+                400: "#facc15",
+                500: "#eab308", // Jaune (Accent)
+                600: "#ca8a04",
+              },
+            },
+            animation: {
+              "fade-in-up": "fadeInUp 0.8s ease-out forwards",
+              "bounce-slow": "bounce 3s infinite",
+            },
+            keyframes: {
+              fadeInUp: {
+                "0%": { opacity: "0", transform: "translateY(20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .glass-nav {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        border-bottom: 3px solid #eab308; /* Bordure jaune pro */
+      }
+
+      /* Motif style papier millimétré / plan */
+      .blueprint-pattern {
+        background-color: #ffffff;
+        background-image:
+          linear-gradient(rgba(30, 58, 138, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(30, 58, 138, 0.08) 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: center center;
+      }
+
+      .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          opacity 0.6s ease-out,
+          transform 0.6s ease-out;
+      }
+
+      .animate-on-scroll.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Design technique avec angles droits */
+      .tech-btn {
+        border-radius: 2px;
+      }
+    </style>
+  </head>
+  <body
+    class="font-sans text-secondary antialiased overflow-x-hidden selection:bg-accent-500 selection:text-secondary"
+  >
+    <nav
+      class="fixed w-full z-50 glass-nav transition-all duration-300"
+      id="navbar"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+          <!-- Logo -->
+          <div class="flex-shrink-0 flex items-center cursor-pointer">
+            <a href="#home" class="flex items-center gap-3 group">
+              <div
+                class="w-10 h-10 bg-secondary flex items-center justify-center text-accent-500 font-bold text-xl tech-btn group-hover:bg-primary-900 transition-colors"
+              >
+                <i class="fa-solid fa-ruler-combined"></i>
+              </div>
+              <span
+                class="font-extrabold text-2xl tracking-tight text-secondary uppercase"
+                >Génie<span class="text-primary-600">Plans</span></span
+              >
+            </a>
+          </div>
+
+          <!-- Desktop Menu -->
+          <div class="hidden md:flex items-center space-x-8">
+            <a
+              href="#home"
+              class="text-secondary hover:text-primary-600 font-bold text-sm uppercase tracking-wide transition-colors"
+              >Accueil</a
+            >
+            <a
+              href="#prestations"
+              class="text-secondary hover:text-primary-600 font-bold text-sm uppercase tracking-wide transition-colors"
+              >Prestations</a
+            >
+            <a
+              href="#concept"
+              class="text-secondary hover:text-primary-600 font-bold text-sm uppercase tracking-wide transition-colors"
+              >Format A4/A3</a
+            >
+            <a
+              href="#tarifs"
+              class="text-secondary hover:text-primary-600 font-bold text-sm uppercase tracking-wide transition-colors"
+              >Tarifs</a
+            >
+            <a
+              href="#contact"
+              class="bg-accent-500 hover:bg-accent-600 text-secondary px-6 py-2.5 font-bold uppercase tracking-wide tech-btn transition-all shadow-md"
+              >Nous contacter</a
+            >
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <div class="md:hidden flex items-center">
+            <button
+              id="mobile-menu-button"
+              class="text-secondary focus:outline-none p-2"
+            >
+              <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden bg-white border-t border-slate-200 absolute w-full shadow-xl border-b-4 border-accent-500"
+      >
+        <div class="px-4 pt-2 pb-6 space-y-2 flex flex-col">
+          <a
+            href="#home"
+            class="mobile-link block px-3 py-3 font-bold text-secondary uppercase tracking-wide hover:bg-slate-50"
+            >Accueil</a
+          >
+          <a
+            href="#prestations"
+            class="mobile-link block px-3 py-3 font-bold text-secondary uppercase tracking-wide hover:bg-slate-50"
+            >Prestations</a
+          >
+          <a
+            href="#concept"
+            class="mobile-link block px-3 py-3 font-bold text-secondary uppercase tracking-wide hover:bg-slate-50"
+            >Format A4/A3</a
+          >
+          <a
+            href="#tarifs"
+            class="mobile-link block px-3 py-3 font-bold text-secondary uppercase tracking-wide hover:bg-slate-50"
+            >Tarifs</a
+          >
+          <a
+            href="#contact"
+            class="mobile-link block mt-4 text-center bg-accent-500 text-secondary px-5 py-3 font-bold uppercase tracking-wide tech-btn"
+            >Nous contacter</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <section
+      id="home"
+      class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden blueprint-pattern min-h-screen flex items-center bg-white border-b border-slate-200"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <!-- Texte -->
+          <div class="opacity-0 animate-fade-in-up">
+            <div
+              class="inline-flex items-center gap-2 py-1.5 px-4 bg-primary-900 text-white font-bold text-xs mb-6 uppercase tracking-widest tech-btn"
+            >
+              <span
+                class="w-2 h-2 rounded-full bg-accent-500 animate-pulse"
+              ></span>
+              Service pour bureaux d'études
+            </div>
+            <h1
+              class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-secondary tracking-tight mb-6 leading-tight uppercase"
+            >
+              Plans de coffrage clairs et professionnels
+
+              <span
+                class="block text-2xl md:text-3xl lg:text-4xl text-primary-600 mt-2 border-l-8 border-accent-500 pl-4"
+              >
+                — Format A4 au A3
+              </span>
+            </h1>
+            <p
+              class="text-lg md:text-xl text-slate-700 mb-8 leading-relaxed font-medium"
+            >
+              Vous devez intégrer vos plans de structure dans une note de
+              calcul,un rapport d'expertise ?<br />
+              Nous réalisons la reproduction et la mise au propre des plans de
+              génie civil, spécialement optimisés pour une impression A4 / A3 :
+              <strong>clairs, haute définition et sans perte de qualité</strong
+              >.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a
+                href="#concept"
+                class="px-8 py-4 bg-primary-900 text-white tech-btn font-bold text-lg hover:bg-primary-800 transition-all flex items-center justify-center gap-3"
+              >
+                L'exigence de la qualité <i class="fa-solid fa-arrow-down"></i>
+              </a>
+              <a
+                href="#contact"
+                class="px-8 py-4 bg-accent-500 text-secondary tech-btn font-bold text-lg hover:bg-accent-400 transition-all flex items-center justify-center gap-3"
+              >
+                Demander un devis
+              </a>
+            </div>
+          </div>
+
+          <!-- Image d'illustration -->
+          <div
+            class="relative opacity-0 animate-fade-in-up"
+            style="animation-delay: 0.2s"
+          >
+            <!-- INSTRUCTION POUR L'UTILISATEUR : 
+                         Remplacez l'URL 'src' ci-dessous par le lien de l'image de votre plan que vous avez téléchargée. -->
+            <div
+              class="relative z-10 border-4 border-secondary bg-white p-2 shadow-2xl transform rotate-1 hover:rotate-0 transition-transform duration-500"
+            >
+              <img
+                src="A4_2.png"
+                alt="Exemple de plan de coffrage A4"
+                class="w-full h-auto object-cover"
+              />
+            </div>
+            <div
+              class="absolute -bottom-6 -right-6 w-full h-full bg-accent-500 z-0 tech-btn"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="prestations"
+      class="py-24 bg-primary-900 text-white relative border-b-8 border-accent-500"
+    >
+      <!-- Overlay géométrique -->
+      <div
+        class="absolute inset-0 opacity-5 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,1)_25%,rgba(255,255,255,1)_50%,transparent_50%,transparent_75%,rgba(255,255,255,1)_75%,rgba(255,255,255,1)_100%)] bg-[length:20px_20px]"
+      ></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-3xl mx-auto mb-16 animate-on-scroll">
+          <h2
+            class="text-accent-500 font-bold tracking-widest uppercase text-sm mb-3"
+          >
+            Nos Domaines d'Intervention
+          </h2>
+          <h3
+            class="text-3xl md:text-5xl font-extrabold uppercase tracking-tight"
+          >
+            Nos Prestations
+          </h3>
+          <div class="w-24 h-1 bg-accent-500 mx-auto mt-6"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Prestation 1 -->
+          <div
+            class="bg-primary-800 p-8 tech-btn border-t-4 border-accent-500 hover:-translate-y-2 transition-transform duration-300 animate-on-scroll shadow-lg"
+          >
+            <i
+              class="fa-solid fa-layer-group text-4xl text-accent-500 mb-6"
+            ></i>
+            <h4 class="text-xl font-bold mb-4 uppercase tracking-wide">
+              Infrastructure
+            </h4>
+            <ul class="space-y-3 text-primary-100 text-sm font-medium">
+              <li class="flex items-start">
+                <i
+                  class="fa-solid fa-caret-right text-accent-500 mt-1 mr-2"
+                ></i>
+                Plans de coffrage des fondations
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fa-solid fa-caret-right text-accent-500 mt-1 mr-2"
+                ></i>
+                Semelles, longrines, radiers...
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fa-solid fa-caret-right text-accent-500 mt-1 mr-2"
+                ></i>
+                Repérage et identification des éléments
+              </li>
+            </ul>
+          </div>
+
+          <!-- Prestation 2 -->
+          <div
+            class="bg-primary-800 p-8 tech-btn border-t-4 border-accent-500 hover:-translate-y-2 transition-transform duration-300 animate-on-scroll delay-100 shadow-lg"
+          >
+            <i
+              class="fa-solid fa-arrows-up-down text-4xl text-accent-500 mb-6"
+            ></i>
+            <h4 class="text-xl font-bold mb-4 uppercase tracking-wide">
+              Éléments Verticaux
+            </h4>
+            <ul class="space-y-3 text-primary-100 text-sm font-medium">
+              <li class="flex items-start">
+                <i
+                  class="fa-solid fa-caret-right text-accent-500 mt-1 mr-2"
+                ></i>
+                Poteaux et voiles
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fa-solid fa-caret-right text-accent-500 mt-1 mr-2"
+                ></i>
+                Repérage clair et organisé
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fa-solid fa-caret-right text-accent-500 mt-1 mr-2"
+                ></i>
+                Identification des axes et éléments structuraux
+              </li>
+            </ul>
+          </div>
+
+          <!-- Prestation 3 -->
+          <div
+            class="bg-primary-800 p-8 tech-btn border-t-4 border-accent-500 hover:-translate-y-2 transition-transform duration-300 animate-on-scroll delay-200 shadow-lg"
+          >
+            <i
+              class="fa-solid fa-table-cells-large text-4xl text-accent-500 mb-6"
+            ></i>
+            <h4 class="text-xl font-bold mb-4 uppercase tracking-wide">
+              Planchers
+            </h4>
+            <ul class="space-y-3 text-primary-100 text-sm font-medium">
+              <li class="flex items-start">
+                <i
+                  class="fa-solid fa-caret-right text-accent-500 mt-1 mr-2"
+                ></i>
+                Coffrage des dalles
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fa-solid fa-caret-right text-accent-500 mt-1 mr-2"
+                ></i>
+                Poutres et trémies
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fa-solid fa-caret-right text-accent-500 mt-1 mr-2"
+                ></i>
+                Repérage précis des éléments
+              </li>
+            </ul>
+          </div>
+
+          <!-- Prestation 4 -->
+          <div
+            class="bg-primary-800 p-8 tech-btn border-t-4 border-accent-500 hover:-translate-y-2 transition-transform duration-300 animate-on-scroll delay-300 shadow-lg"
+          >
+            <i class="fa-solid fa-building text-4xl text-accent-500 mb-6"></i>
+            <h4 class="text-xl font-bold mb-4 uppercase tracking-wide">
+              Terrasse
+            </h4>
+            <ul class="space-y-3 text-primary-100 text-sm font-medium">
+              <li class="flex items-start">
+                <i
+                  class="fa-solid fa-caret-right text-accent-500 mt-1 mr-2"
+                ></i>
+                Plans de coffrage
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fa-solid fa-caret-right text-accent-500 mt-1 mr-2"
+                ></i>
+                Éléments structuraux spécifiques
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fa-solid fa-caret-right text-accent-500 mt-1 mr-2"
+                ></i>
+                Repérage et identification
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="mt-12 bg-secondary border-2 border-accent-500 p-8 md:p-12 tech-btn animate-on-scroll shadow-2xl relative overflow-hidden"
+        >
+          <!-- Motif de fond discret -->
+          <div class="absolute inset-0 opacity-10 blueprint-pattern"></div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+            <div class="md:col-span-2 flex flex-col justify-center">
+              <div class="inline-flex items-center gap-2 mb-3">
+                <span
+                  class="bg-accent-500 text-secondary text-xs font-bold px-3 py-1 uppercase tracking-wider tech-btn"
+                  >Service d'Expertise</span
+                >
+              </div>
+              <h3
+                class="text-2xl md:text-3xl font-extrabold text-white mb-2 uppercase tracking-tight flex items-center gap-3"
+              >
+                <i class="fa-solid fa-tape text-accent-500"></i> Relevé de
+                l'existant (As-Builts)
+              </h3>
+              <p class="text-xl text-primary-400 font-bold mb-6">
+                "Nous redonnons vie à vos bâtiments existants."
+              </p>
+
+              <p
+                class="text-slate-300 leading-relaxed mb-4 text-lg font-medium"
+              >
+                Vous intervenez sur un ouvrage qui ne possède pas de plans ?
+                Quelle que soit la complexité du bâtiment, nous nous chargeons
+                du <strong>relevé in situ</strong> méticuleux, suivi de la
+                reproduction complète et fidèle des plans
+                <strong>tel que construit (As-builts)</strong>.
+              </p>
+            </div>
+
+            <div
+              class="bg-primary-900 border-l-4 border-accent-500 p-6 flex flex-col justify-center tech-btn transform md:translate-x-4 shadow-lg"
+            >
+              <div class="flex items-center gap-3 mb-4">
+                <div
+                  class="w-12 h-12 bg-secondary flex items-center justify-center rounded-full border border-accent-500 shrink-0 shadow-inner"
+                >
+                  <i
+                    class="fa-solid fa-scale-balanced text-xl text-accent-500"
+                  ></i>
+                </div>
+                <h4
+                  class="text-lg font-bold text-white uppercase leading-tight"
+                >
+                  Experts auprès des tribunaux
+                </h4>
+              </div>
+              <p class="text-sm text-primary-100 leading-relaxed">
+                Nos prestations sont un atout déterminant pour les experts
+                judiciaires. Fournir des plans rigoureux, fidèles à la réalité
+                du terrain,
+                <strong
+                  >augmente incontestablement la crédibilité, le poids et la
+                  valeur de vos rapports d'expertise</strong
+                >.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- FIN NOUVEAU SERVICE -->
+      </div>
+    </section>
+
+    <section id="concept" class="py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <!-- Texte -->
+          <div class="animate-on-scroll">
+            <h2
+              class="text-primary-600 font-bold tracking-widest uppercase text-sm mb-2"
+            >
+              Notre Méthodologie
+            </h2>
+            <h3
+              class="text-3xl md:text-4xl font-extrabold text-secondary mb-6 leading-tight uppercase"
+            >
+              Des plans conçus pour votre note de calcul
+            </h3>
+
+            <div class="bg-slate-50 border-l-4 border-secondary p-6 mb-8">
+              <p class="text-secondary font-bold text-lg mb-2">
+                Vos notes de calcul, plus claires.
+              </p>
+              <p class="text-slate-600">
+                Un bon plan intégré dans une note de calcul doit permettre de
+                comprendre rapidement :
+              </p>
+              <ul class="mt-3 font-medium text-slate-800 space-y-1">
+                <li>
+                  <i
+                    class="fa-solid fa-magnifying-glass text-accent-500 w-5"
+                  ></i>
+                  Où se trouve l'élément ?
+                </li>
+                <li>
+                  <i class="fa-solid fa-tag text-accent-500 w-5"></i> Quel est
+                  son repère ?
+                </li>
+                <li>
+                  <i class="fa-solid fa-compass text-accent-500 w-5"></i> Quelle
+                  est sa disposition ?
+                </li>
+                <li>
+                  <i class="fa-solid fa-sitemap text-accent-500 w-5"></i>
+                  Comment sont-ils organisés ?
+                </li>
+              </ul>
+            </div>
+
+            <p class="text-slate-600 mb-6 leading-relaxed">
+              Grâce à <strong>notre propre logiciel de dessin 2D</strong>, nous
+              réalisons des plans vectoriels spécialement pensés pour les notes
+              de calcul. Notre objectif est de transformer un plan technique
+              complexe en une représentation simple, claire et parfaitement
+              lisible.
+            </p>
+
+            <!-- Nouvelle section de réassurance (CTC / Qualité) -->
+            <div
+              class="bg-primary-50 border border-primary-100 p-5 mb-8 tech-btn shadow-sm"
+            >
+              <h4
+                class="font-bold text-primary-900 uppercase text-sm mb-3 flex items-center gap-2"
+              >
+                <i class="fa-solid fa-shield-halved text-accent-500"></i>
+                Approbation & Haute Fidélité
+              </h4>
+              <p class="text-sm text-slate-700 leading-relaxed">
+                <strong>Impression Évolutive :</strong> Nos plans vectoriels
+                garantissent une impression parfaite,
+                <strong
+                  >du format A4 jusqu'au format A3, sans la moindre perte de
+                  qualité</strong
+                >. Mettez vos éléments structuraux en valeur avec des
+                <strong>couleurs sur-mesure et époustouflantes</strong>, selon
+                vos exigences.<br /><br />
+                <strong>Validation Facilitée :</strong> La rigueur et la
+                précision absolue de nos dessins confèrent à vos dossiers une
+                <strong
+                  >crédibilité élevée et irréprochable auprès des organismes de
+                  contrôle (CTC, CDE...)</strong
+                >, accélérant ainsi l'approbation de vos notes de calcul.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-8 h-8 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center shrink-0"
+                >
+                  <i class="fa-solid fa-check text-sm"></i>
+                </div>
+                <span class="font-bold text-secondary text-sm uppercase"
+                  >Évolutif du A4 au A3</span
+                >
+              </div>
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-8 h-8 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center shrink-0"
+                >
+                  <i class="fa-solid fa-check text-sm"></i>
+                </div>
+                <span class="font-bold text-secondary text-sm uppercase"
+                  >Couleurs sur-mesure</span
+                >
+              </div>
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-8 h-8 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center shrink-0"
+                >
+                  <i class="fa-solid fa-check text-sm"></i>
+                </div>
+                <span class="font-bold text-secondary text-sm uppercase"
+                  >Crédibilité CTC / CDE</span
+                >
+              </div>
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-8 h-8 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center shrink-0"
+                >
+                  <i class="fa-solid fa-check text-sm"></i>
+                </div>
+                <span class="font-bold text-secondary text-sm uppercase"
+                  >Dessins Propres & Structurés</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Images Before/After ou Logiciel -->
+          <div class="relative animate-on-scroll">
+            <!-- INSTRUCTION POUR L'UTILISATEUR : 
+                         Remplacez ces images par des captures d'écran de votre logiciel ou des exemples Avant/Après -->
+            <div class="grid grid-cols-2 gap-4 relative z-10">
+              <div
+                class="border-4 border-slate-200 bg-white shadow-md transform -translate-y-4"
+              >
+                <div
+                  class="bg-slate-800 text-white text-xs text-center py-1 font-bold"
+                >
+                  Plan Croquis (Source)
+                </div>
+                <img src="Pap.jpeg" alt="Plan original" class="w-full h-auto" />
+              </div>
+              <div
+                class="border-4 border-secondary bg-white shadow-xl transform translate-y-4"
+              >
+                <div
+                  class="bg-accent-500 text-secondary text-xs text-center py-1 font-bold"
+                >
+                  Rendu A4 (Notre Service)
+                </div>
+                <img
+                  src="Pap2.png"
+                  alt="Plan A4 Propre"
+                  class="w-full h-auto"
+                />
+              </div>
+            </div>
+            <!-- Élément décoratif -->
+            <div
+              class="absolute inset-0 bg-primary-50 transform scale-110 -z-0 rounded-full blur-3xl opacity-50"
+            ></div>
+          </div>
+        </div>
+
+        <!-- NOUVEAU BLOC : Sources acceptées -->
+        <div
+          class="mt-24 bg-slate-900 border-2 border-slate-800 tech-btn animate-on-scroll relative overflow-hidden shadow-2xl"
+        >
+          <!-- Motif de fond discret -->
+          <div class="absolute inset-0 blueprint-pattern opacity-10"></div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 relative z-10">
+            <div class="p-8 md:p-12 md:col-span-2">
+              <h4
+                class="text-accent-500 font-bold tracking-widest uppercase text-sm mb-3"
+              >
+                <i class="fa-solid fa-file-import mr-2"></i>Tous supports
+                acceptés
+              </h4>
+              <h3
+                class="text-2xl md:text-3xl font-extrabold text-white mb-6 uppercase tracking-tight"
+              >
+                Flexibilité Totale de vos sources
+              </h3>
+
+              <p
+                class="text-slate-300 leading-relaxed mb-6 font-medium text-lg"
+              >
+                La source de reproduction de vos dessins n'est pas une
+                contrainte. Nous travaillons à partir de tous vos fichiers :
+                <strong>PDF, AutoCAD, Revit</strong>, et même des vues en plan
+                extraites de logiciels de calcul comme
+                <strong>Robot Structural Analysis</strong>.
+              </p>
+
+              <div
+                class="bg-primary-900/80 border-l-4 border-accent-500 p-5 mb-8"
+              >
+                <p class="text-white font-medium leading-relaxed">
+                  Vous n'avez qu'un <strong>croquis à main levée</strong> ou un
+                  <strong>dessin sur un bout de papier</strong> (tant qu'il
+                  reste lisible) ? Aucun problème, nous nous en chargeons.
+                </p>
+              </div>
+
+              <p
+                class="text-2xl font-extrabold text-accent-500 uppercase tracking-wide border-l-2 border-white pl-4"
+              >
+                "Nous transformons vos pensées en une réalité."
+              </p>
+            </div>
+
+            <!-- Grille d'icônes pour les formats -->
+            <div
+              class="bg-primary-900 p-8 flex flex-col justify-center gap-4 border-t md:border-t-0 md:border-l border-slate-800"
+            >
+              <div
+                class="flex items-center gap-4 bg-slate-800 p-4 tech-btn hover:bg-primary-800 hover:border-l-4 hover:border-accent-500 transition-all cursor-default"
+              >
+                <i
+                  class="fa-regular fa-file-pdf text-3xl text-accent-500 w-10 text-center"
+                ></i>
+                <span
+                  class="font-bold text-white uppercase text-sm tracking-wider"
+                  >Fichiers PDF</span
+                >
+              </div>
+              <div
+                class="flex items-center gap-4 bg-slate-800 p-4 tech-btn hover:bg-primary-800 hover:border-l-4 hover:border-accent-500 transition-all cursor-default"
+              >
+                <i
+                  class="fa-solid fa-bezier-curve text-3xl text-accent-500 w-10 text-center"
+                ></i>
+                <span
+                  class="font-bold text-white uppercase text-sm tracking-wider"
+                  >AutoCAD / Revit</span
+                >
+              </div>
+              <div
+                class="flex items-center gap-4 bg-slate-800 p-4 tech-btn hover:bg-primary-800 hover:border-l-4 hover:border-accent-500 transition-all cursor-default"
+              >
+                <i
+                  class="fa-solid fa-cubes text-3xl text-accent-500 w-10 text-center"
+                ></i>
+                <span
+                  class="font-bold text-white uppercase text-sm tracking-wider"
+                  >Robot Structural</span
+                >
+              </div>
+              <div
+                class="flex items-center gap-4 bg-slate-800 p-4 tech-btn hover:bg-primary-800 hover:border-l-4 hover:border-accent-500 transition-all cursor-default"
+              >
+                <i
+                  class="fa-solid fa-pen-ruler text-3xl text-accent-500 w-10 text-center"
+                ></i>
+                <span
+                  class="font-bold text-white uppercase text-sm tracking-wider"
+                  >Croquis & Papier</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- FIN DU NOUVEAU BLOC -->
+      </div>
+    </section>
+
+    <section id="tarifs" class="py-24 bg-secondary text-white relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16 animate-on-scroll">
+          <h2
+            class="text-accent-500 font-bold tracking-widest uppercase text-sm mb-3"
+          >
+            Tarification
+          </h2>
+          <h3
+            class="text-3xl md:text-4xl font-extrabold uppercase tracking-tight"
+          >
+            Une offre adaptée à vos besoins
+          </h3>
+          <div class="w-24 h-1 bg-accent-500 mx-auto mt-6"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Étudiants -->
+          <div
+            class="bg-slate-900 border border-slate-800 p-8 tech-btn flex flex-col animate-on-scroll"
+          >
+            <div class="mb-6">
+              <i
+                class="fa-solid fa-graduation-cap text-3xl text-primary-500 mb-4"
+              ></i>
+              <h4 class="text-2xl font-bold uppercase mb-2">Étudiants</h4>
+              <p class="text-slate-400 text-sm">
+                Pour vos projets d'études et PFE.
+              </p>
+            </div>
+            <div class="mb-8">
+              <span class="text-3xl font-extrabold text-primary-500"
+                >Prix Réduit</span
+              >
+            </div>
+            <ul class="space-y-3 mb-8 flex-grow text-slate-300 text-sm">
+              <li>
+                <i class="fa-solid fa-check text-primary-500 mr-2"></i
+                >Accompagnement académique
+              </li>
+              <li>
+                <i class="fa-solid fa-check text-primary-500 mr-2"></i>Mise au
+                format A4
+              </li>
+              <li>
+                <i class="fa-solid fa-check text-primary-500 mr-2"></i
+                >Lisibilité garantie
+              </li>
+            </ul>
+            <a
+              href="#contact"
+              class="w-full block text-center border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white py-3 font-bold uppercase tech-btn transition-colors"
+            >
+              Nous contacter
+            </a>
+          </div>
+
+          <!-- Professionnels (Mis en avant) -->
+          <div
+            class="bg-primary-900 border-2 border-accent-500 p-8 tech-btn flex flex-col transform md:-translate-y-4 shadow-2xl relative animate-on-scroll delay-100"
+          >
+            <div
+              class="absolute top-0 right-0 bg-accent-500 text-secondary text-xs font-bold px-3 py-1 uppercase tracking-wider tech-btn"
+            >
+              Recommandé
+            </div>
+            <div class="mb-6">
+              <i
+                class="fa-solid fa-briefcase text-3xl text-accent-500 mb-4"
+              ></i>
+              <h4 class="text-2xl font-bold uppercase mb-2">Professionnels</h4>
+              <p class="text-primary-200 text-sm">
+                Bureaux d'études, Ingénieurs, Techniciens.
+              </p>
+            </div>
+            <div class="mb-8">
+              <span class="text-3xl font-extrabold text-white"
+                >Prix Raisonnable</span
+              >
+              <p class="text-accent-500 font-bold text-sm uppercase mt-1">
+                Négociable selon volume
+              </p>
+            </div>
+            <ul class="space-y-3 mb-8 flex-grow text-white text-sm">
+              <li>
+                <i class="fa-solid fa-check text-accent-500 mr-2"></i>Priorité
+                de traitement
+              </li>
+              <li>
+                <i class="fa-solid fa-check text-accent-500 mr-2"></i>Adaptation
+                stricte à votre note de calcul
+              </li>
+              <li>
+                <i class="fa-solid fa-check text-accent-500 mr-2"></i>Qualité
+                bureau d'études
+              </li>
+              <li>
+                <i class="fa-solid fa-check text-accent-500 mr-2"></i
+                >Modifications possibles
+              </li>
+            </ul>
+            <a
+              href="#contact"
+              class="w-full block text-center bg-accent-500 text-secondary hover:bg-accent-400 py-3 font-bold uppercase tech-btn transition-colors"
+            >
+              Demander un devis
+            </a>
+          </div>
+
+          <!-- Pédagogique -->
+          <div
+            class="bg-slate-900 border border-slate-800 p-8 tech-btn flex flex-col animate-on-scroll delay-200"
+          >
+            <div class="mb-6">
+              <i
+                class="fa-solid fa-chalkboard-user text-3xl text-white mb-4"
+              ></i>
+              <h4 class="text-2xl font-bold uppercase mb-2">Pédagogique</h4>
+              <p class="text-slate-400 text-sm">
+                Pour l'enseignement (sans but lucratif).
+              </p>
+            </div>
+            <div class="mb-8">
+              <span class="text-3xl font-extrabold text-white"
+                >Prix Réduit</span
+              >
+              <p class="text-slate-400 font-medium text-xs uppercase mt-1">
+                Usage limité
+              </p>
+            </div>
+            <ul class="space-y-3 mb-8 flex-grow text-slate-300 text-sm">
+              <li>
+                <i class="fa-solid fa-check text-slate-400 mr-2"></i>Supports de
+                cours
+              </li>
+              <li>
+                <i class="fa-solid fa-check text-slate-400 mr-2"></i>Plans
+                didactiques clairs
+              </li>
+              <li>
+                <i class="fa-solid fa-check text-slate-400 mr-2"></i>Strictement
+                non-commercial
+              </li>
+            </ul>
+            <a
+              href="#contact"
+              class="w-full block text-center border-2 border-slate-600 text-white hover:bg-white hover:text-secondary py-3 font-bold uppercase tech-btn transition-colors"
+            >
+              Faire une demande
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="py-24 bg-slate-100 relative blueprint-pattern">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="bg-white border-t-8 border-secondary shadow-xl tech-btn overflow-hidden animate-on-scroll"
+        >
+          <div class="grid grid-cols-1 lg:grid-cols-5">
+            <!-- Contact Info (Left) -->
+            <div
+              class="bg-secondary p-10 md:p-14 text-white lg:col-span-2 relative"
+            >
+              <div class="relative z-10 h-full flex flex-col justify-between">
+                <div>
+                  <h3 class="text-3xl font-extrabold uppercase mb-4">
+                    Contactez-nous
+                  </h3>
+                  <p class="text-slate-400 mb-10 text-sm leading-relaxed">
+                    Un plan clair = une note de calcul plus facile à lire.
+                    Envoyez-nous vos besoins de reproduction de plans de
+                    structure.
+                  </p>
+
+                  <div class="space-y-8">
+                    <div class="flex items-start gap-4">
+                      <div
+                        class="w-10 h-10 bg-slate-800 text-accent-500 flex items-center justify-center tech-btn shrink-0"
+                      >
+                        <i class="fa-solid fa-envelope"></i>
+                      </div>
+                      <div>
+                        <h4 class="text-sm font-bold uppercase text-slate-300">
+                          Email
+                        </h4>
+                        <p class="text-white font-medium">
+                          Le.Navire.007@gmail.com
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                      <div
+                        class="w-10 h-10 bg-slate-800 text-accent-500 flex items-center justify-center tech-btn shrink-0"
+                      >
+                        <i class="fa-solid fa-phone"></i>
+                      </div>
+                      <div>
+                        <h4 class="text-sm font-bold uppercase text-slate-300">
+                          Téléphone
+                        </h4>
+                        <p class="text-white font-medium">
+                          (+213) 06 96 11 34 24
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Form (Right) -->
+            <div class="p-10 md:p-14 lg:col-span-3">
+              <h4 class="text-2xl font-extrabold text-secondary uppercase mb-8">
+                Envoyer une demande
+              </h4>
+              <form id="contactForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      for="name"
+                      class="block text-xs font-bold text-slate-500 uppercase mb-2"
+                      >Nom / Société</label
+                    >
+                    <input
+                      type="text"
+                      id="name"
+                      class="w-full px-4 py-3 border-2 border-slate-200 focus:border-primary-600 outline-none transition-all tech-btn bg-slate-50 focus:bg-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      for="email"
+                      class="block text-xs font-bold text-slate-500 uppercase mb-2"
+                      >Email</label
+                    >
+                    <input
+                      type="email"
+                      id="email"
+                      class="w-full px-4 py-3 border-2 border-slate-200 focus:border-primary-600 outline-none transition-all tech-btn bg-slate-50 focus:bg-white"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    for="profil"
+                    class="block text-xs font-bold text-slate-500 uppercase mb-2"
+                    >Votre Profil</label
+                  >
+                  <select
+                    id="profil"
+                    class="w-full px-4 py-3 border-2 border-slate-200 focus:border-primary-600 outline-none transition-all tech-btn bg-slate-50 focus:bg-white"
+                  >
+                    <option value="pro">
+                      Professionnel (Bureau d'études, Ingénieur...)
+                    </option>
+                    <option value="etudiant">Étudiant</option>
+                    <option value="pedago">
+                      Enseignant / Structure pédagogique
+                    </option>
+                  </select>
+                </div>
+
+                <div>
+                  <label
+                    for="message"
+                    class="block text-xs font-bold text-slate-500 uppercase mb-2"
+                    >Détails de votre projet</label
+                  >
+                  <textarea
+                    id="message"
+                    rows="4"
+                    class="w-full px-4 py-3 border-2 border-slate-200 focus:border-primary-600 outline-none transition-all tech-btn bg-slate-50 focus:bg-white resize-none"
+                    placeholder="Décrivez le type de plans (fondations, planchers...) et le volume estimé."
+                    required
+                  ></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  class="w-full bg-primary-900 hover:bg-primary-800 text-white font-bold uppercase py-4 px-6 tech-btn shadow-md transition-colors flex justify-center items-center gap-2"
+                >
+                  Envoyer la demande
+                  <i class="fa-solid fa-paper-plane text-accent-500"></i>
+                </button>
+
+                <!-- Success Message -->
+                <div
+                  id="formSuccess"
+                  class="hidden mt-4 p-4 bg-green-50 text-green-800 border-l-4 border-green-500 flex items-center gap-3 font-medium"
+                >
+                  <i
+                    class="fa-solid fa-circle-check text-xl text-green-600"
+                  ></i>
+                  <span
+                    >Demande envoyée avec succès. Nous vous répondrons
+                    rapidement.</span
+                  >
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-secondary text-slate-400 py-12 border-t border-slate-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center border-b border-slate-800 pb-8 mb-8 gap-6"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 bg-slate-800 flex items-center justify-center text-accent-500 font-bold tech-btn"
+            >
+              <i class="fa-solid fa-ruler-combined text-sm"></i>
+            </div>
+            <span
+              class="font-extrabold text-xl text-white uppercase tracking-wider"
+              >Génie<span class="text-primary-500">Plans</span></span
+            >
+          </div>
+
+          <div class="flex gap-6 text-sm font-bold uppercase tracking-wide">
+            <a href="#home" class="hover:text-accent-500 transition-colors"
+              >Accueil</a
+            >
+            <a
+              href="#prestations"
+              class="hover:text-accent-500 transition-colors"
+              >Prestations</a
+            >
+            <a href="#tarifs" class="hover:text-accent-500 transition-colors"
+              >Tarifs</a
+            >
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col md:flex-row justify-between items-center text-sm font-medium"
+        >
+          <p>
+            &copy; <span id="currentYear"></span> GéniePlans. Tous droits
+            réservés.
+          </p>
+          <p class="mt-2 md:mt-0">
+            Reproduction de plans pour notes de calcul.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Set current year
+        document.getElementById("currentYear").textContent =
+          new Date().getFullYear();
+
+        // Mobile Menu Toggle
+        const btn = document.getElementById("mobile-menu-button");
+        const menu = document.getElementById("mobile-menu");
+        const mobileLinks = document.querySelectorAll(".mobile-link");
+        const icon = btn.querySelector("i");
+
+        function toggleMenu() {
+          menu.classList.toggle("hidden");
+          if (menu.classList.contains("hidden")) {
+            icon.classList.replace("fa-xmark", "fa-bars");
+          } else {
+            icon.classList.replace("fa-bars", "fa-xmark");
+          }
+        }
+
+        btn.addEventListener("click", toggleMenu);
+        mobileLinks.forEach((link) => {
+          link.addEventListener("click", () => {
+            if (!menu.classList.contains("hidden")) toggleMenu();
+          });
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById("navbar");
+        window.addEventListener("scroll", () => {
+          if (window.scrollY > 10) {
+            navbar.classList.add("shadow-md");
+          } else {
+            navbar.classList.remove("shadow-md");
+          }
+        });
+
+        // Scroll Animation
+        const observerOptions = {
+          root: null,
+          rootMargin: "0px",
+          threshold: 0.15,
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+
+        const animateElements = document.querySelectorAll(".animate-on-scroll");
+        animateElements.forEach((el) => observer.observe(el));
+
+        // Form Submission Simulation
+        const contactForm = document.getElementById("contactForm");
+        const formSuccess = document.getElementById("formSuccess");
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+
+        contactForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const originalBtnText = submitBtn.innerHTML;
+          submitBtn.innerHTML =
+            '<i class="fa-solid fa-circle-notch fa-spin"></i> Envoi...';
+          submitBtn.disabled = true;
+
+          setTimeout(() => {
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+            formSuccess.classList.remove("hidden");
+            contactForm.reset();
+            setTimeout(() => {
+              formSuccess.classList.add("hidden");
+            }, 6000);
+          }, 1500);
+        });
+      });
+    </script>
+  </body>
+</html>
